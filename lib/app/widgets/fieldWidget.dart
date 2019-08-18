@@ -11,7 +11,7 @@ class Field extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color col = Colors.blue[300];
-    Color old =  Theme.of(context).primaryColor;
+    // Color old =  Theme.of(context).primaryColor;
     return Container(
       margin: EdgeInsets.all(10),
       padding: EdgeInsets.all(10),

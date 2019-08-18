@@ -39,12 +39,13 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   Widget build(BuildContext context) {
     var tsk = Provider.of<TasksModel>(context);
-    // print(tsk.allTasks.length);
+    // print('tskModel length:  ${tsk.allTasks.length}');
+    // print('tasksModel length: ${tasksModel.allTasks.length}');
     return WillPopScope(
-        onWillPop: (){
-          _exitApp(context);
-        },
-          child: Scaffold(
+      onWillPop: () {
+        _exitApp(context);
+      },
+      child: Scaffold(
         body: CustomScrollView(
           slivers: <Widget>[
             SliverList(
@@ -61,13 +62,19 @@ class _HomePageViewState extends State<HomePageView> {
                   ),
                 ),
                 Text(
-                  "Tasks to be done: ",
+                  "Reminders",
                   style: TextStyle(
+                      color: Colors.indigoAccent,
                       fontSize: 35,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Roboto'),
-                      textAlign: TextAlign.center,
+                  textAlign: TextAlign.center,
                 ),
+                Divider(
+                  color: Colors.black38,
+                  endIndent: 150,
+                  indent: 150,
+                )
               ]),
             ),
             tsk.isLoading
@@ -84,20 +91,46 @@ class _HomePageViewState extends State<HomePageView> {
                     ? SliverList(
                         delegate: SliverChildListDelegate([
                           Container(
-                            alignment: Alignment.center,
+                            height: MediaQuery.of(context).size.height * 0.27,
+                            margin: EdgeInsets.all(16),
+                            padding: EdgeInsets.all(16),
+                            alignment: Alignment.bottomCenter,
                             child: Text(
-                              "No Tasks pending",
-                              style: TextStyle(fontSize: 30),
+                              "Hmmm, No Reminders...",
+                              style: TextStyle(fontSize: 25),
                               textAlign: TextAlign.center,
                             ),
-                          )
+                          ),
                         ]),
                       )
                     : SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (context, i) {
                             Task task = tsk.allTasks[i];
-                            return TodoTaskList(task: task);
+                            return Dismissible(
+                              key: Key(task.id.toString()),
+                              background: Container(
+                                padding: EdgeInsets.only(right: 20),
+                                alignment: Alignment.centerRight,
+                                color: Colors.transparent,
+                                child: Icon(Icons.delete),
+                              ),
+                              direction: DismissDirection.endToStart,
+                              onDismissed: (direction) {
+                                tsk.deleteTask(task);
+                                Scaffold.of(context).showSnackBar(SnackBar(
+                                  content: Text(
+                                    '${task.title} deleted',
+                                  ),
+                                  duration: Duration(seconds: 3),
+                                  action: SnackBarAction(
+                                    label: "Undo",
+                                    onPressed: () {},
+                                  ),
+                                ));
+                              },
+                              child: TodoTaskList(task: task),
+                            );
                           },
                           childCount: tsk.allTasks.length,
                         ),

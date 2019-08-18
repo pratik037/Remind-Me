@@ -13,10 +13,8 @@ class TasksModel extends ChangeNotifier {
   List<Task> get allTasks => _tasks;
 
   Future getAllTasks() async {
-    // // isloading true
+    
     _isLoading = true;
-
-    // // notifylisteners
     notifyListeners();
 
     List<Task> fetched = [];
@@ -29,20 +27,14 @@ class TasksModel extends ChangeNotifier {
         print("Fetched is: ");
         print(fetched.length);
       });
-      // assign the new List<Task> to _tasks
-    print('${fetched.length} fetched');
-    if (fetched.length > 0) {
-      
+    
+    // assign the new fetched List<Task> to _tasks
+    if (fetched.length > 0) {  
       _tasks = fetched;
     }
-
-    //isloading false
     _isLoading = false;
-
-    // // notifylisteners
     notifyListeners();
     });
-    
   }
 
   Future<bool> addTask(Map<String, dynamic> task) async {
@@ -59,7 +51,9 @@ class TasksModel extends ChangeNotifier {
   }
 
   void deleteTask(Task task) {
+    db.deleteTask(task.id);
     _tasks.remove(task);
+    print(task.title);
     notifyListeners();
   }
 }
