@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:remindme/app/models/taskModel.dart';
+import 'package:remindme/app/widgets/fieldWidget.dart';
+import '../widgets/bottomSheet.dart';
 
 class TodoTaskList extends StatelessWidget {
   const TodoTaskList({
@@ -12,6 +15,8 @@ class TodoTaskList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController title = TextEditingController();
+    TextEditingController desc = TextEditingController();
     return Container(
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.all(10),
@@ -20,47 +25,7 @@ class TodoTaskList extends StatelessWidget {
             Material(
               elevation: 4,
               borderRadius: BorderRadius.only(bottomRight: Radius.circular(30)),
-              child: InkWell(
-                onTap: () {
-                  print('${task.title} was pressed');
-                },
-                child: Container(
-                  constraints: BoxConstraints(minHeight: 150),
-                  padding: EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            '${DateFormat.yMMMMd().format(task.date)}',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            '${task.date.hour} : ${task.date.minute}',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ],
-                      ),
-                      Text(
-                        task.title,
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      Divider(
-                        color: Colors.black,
-                        endIndent: 250,
-                      ),
-                      Text(
-                        task.desc,
-                        style: TextStyle(fontSize: 16),
-                      )
-                    ],
-                  ),
-                ),
-              ),
+              child: BttomSheet(task: task, title: title, desc: desc),
             ),
             Center(
               child: Padding(
@@ -78,3 +43,5 @@ class TodoTaskList extends StatelessWidget {
         ));
   }
 }
+
+

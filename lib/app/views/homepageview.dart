@@ -110,6 +110,7 @@ class _HomePageViewState extends State<HomePageView> {
                             return Dismissible(
                               key: Key(task.id.toString()),
                               background: Container(
+                                
                                 padding: EdgeInsets.only(right: 20),
                                 alignment: Alignment.centerRight,
                                 color: Colors.transparent,

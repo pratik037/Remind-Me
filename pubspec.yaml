@@ -25,10 +25,8 @@ dependencies:
   cupertino_icons: ^0.1.2
   path_provider: ^1.2.0
   flutter_svg: ^0.13.1
-  font_awesome_flutter: ^8.5.0
   intl: ^0.15.8
   sqflite: ^1.1.6+3
-  random_string: ^1.1.0
   flutter_custom_clippers: ^1.0.4
   provider: ^3.0.0+1
   date_format: ^1.0.6
@@ -54,6 +52,7 @@ flutter:
    - assets/images/add.svg
    - assets/images/tasks.svg
    - assets/images/nodata.svg
+   - assets/images/complete.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
