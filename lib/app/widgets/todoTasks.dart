@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:remindme/app/models/taskModel.dart';
-import 'package:remindme/app/widgets/fieldWidget.dart';
 import '../widgets/bottomSheet.dart';
 
 class TodoTaskList extends StatelessWidget {
@@ -43,5 +40,3 @@ class TodoTaskList extends StatelessWidget {
         ));
   }
 }
-
-

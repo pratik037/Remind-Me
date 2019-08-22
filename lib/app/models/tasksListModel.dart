@@ -12,8 +12,16 @@ class TasksModel extends ChangeNotifier {
 
   List<Task> get allTasks => _tasks;
 
+  Map<String, dynamic> _taskMap = {};
+
+  Map<String, dynamic> get taskMap => _taskMap;
+
+  set taskMap(Map<String, dynamic> map) {
+    _taskMap = map;
+    notifyListeners();
+  }
+
   Future getAllTasks() async {
-    
     _isLoading = true;
     notifyListeners();
 
@@ -27,13 +35,13 @@ class TasksModel extends ChangeNotifier {
         print("Fetched is: ");
         print(fetched.length);
       });
-    
-    // assign the new fetched List<Task> to _tasks
-    if (fetched.length > 0) {  
-      _tasks = fetched;
-    }
-    _isLoading = false;
-    notifyListeners();
+
+      // assign the new fetched List<Task> to _tasks
+      if (fetched.length > 0) {
+        _tasks = fetched;
+      }
+      _isLoading = false;
+      notifyListeners();
     });
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:remindme/app/models/taskModel.dart';
+import 'package:remindme/app/widgets/dtBtn.dart';
 import 'package:remindme/app/widgets/fieldWidget.dart';
 
 class BttomSheet extends StatelessWidget {
@@ -24,13 +25,14 @@ class BttomSheet extends StatelessWidget {
               //this code takes care of updating the reminders.
               // Has fields to update the reminder details.
               showModalBottomSheet(
+                isScrollControlled: true,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30),
                           topRight: Radius.circular(30))),
                   builder: (BuildContext context) {
                     return SingleChildScrollView(
-                                          child: Column(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
@@ -72,15 +74,7 @@ class BttomSheet extends StatelessWidget {
                           ),
                           Field(name: "New Title", controller: title),
                           Field(name: "New Description", controller: desc),
-
-                          RaisedButton(onPressed: () {},
-                          padding: EdgeInsets.all(8),
-                          shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0)),
-                          color: Colors.blue[300],
-                          child: Text("Update", style: TextStyle(color: Colors.white, fontSize: 17),),
-
-                          )
+                          DateTimeButton(),
                         ],
                       ),
                     );
@@ -92,6 +86,7 @@ class BttomSheet extends StatelessWidget {
           //Just shows the details in a bottom sheet
           () {
               showModalBottomSheet(
+                isScrollControlled: true,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30),
