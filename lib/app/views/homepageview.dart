@@ -46,6 +46,7 @@ class _HomePageViewState extends State<HomePageView> {
         _exitApp(context);
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         body: CustomScrollView(
           slivers: <Widget>[
             SliverList(
@@ -80,9 +81,10 @@ class _HomePageViewState extends State<HomePageView> {
             tsk.isLoading
                 ? SliverList(
                     delegate: SliverChildListDelegate([
-                      SizedBox(
-                        height: 200,
-                        width: 200,
+                      Container(
+                        height: 20,
+                        width: 5,
+                        alignment: Alignment.center,
                         child: CircularProgressIndicator(),
                       )
                     ]),
@@ -141,7 +143,7 @@ class _HomePageViewState extends State<HomePageView> {
                                   tsk.check(task.id);
                                 });
                               },
-                              child: TodoTaskList(task: task),
+                              child: TodoTaskList(task: task,),
                             );
                           },
                           childCount: tsk.allTasks.length,
