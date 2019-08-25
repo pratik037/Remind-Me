@@ -16,7 +16,7 @@ class _DateTimeButtonState extends State<DateTimeButton> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
       context: context,
-      firstDate: DateTime.now(),
+      firstDate: DateTime(DateTime.now().year),
       initialDate: DateTime.now(),
       lastDate: DateTime(2101),
     );
@@ -91,7 +91,7 @@ class _DateTimeButtonState extends State<DateTimeButton> {
     DateTime dateTime = DateTime(_selectedDate.year, _selectedDate.month,
         _selectedDate.day, _selectedTime.hour, _selectedTime.minute);
 
-    if (dateTime != null) {
+    if (dateTime != null && dateTime.isAfter(DateTime.now())) {
       setState(() {
         _finalDateTime = dateTime;
       });

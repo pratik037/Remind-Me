@@ -81,7 +81,7 @@ class _AddTaskViewState extends State<AddTaskView> {
   SnackBar addPageSnack() {
     return SnackBar(
       content: Text(
-        'Date and Time not selected',
+        'Please select date and time of the future.',
         style: TextStyle(
           fontSize: 18,
           color: Colors.white,

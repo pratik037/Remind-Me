@@ -36,12 +36,11 @@ class BttomSheet extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          SizedBox(
-                            height: 20,
-                            width: 100,
-                            child: Divider(
-                              color: Colors.grey,
-                            ),
+                          Container(
+                            margin: EdgeInsets.only(top:10),
+                            height: 2,
+                            width: 60,
+                            color: Colors.grey,
                           ),
                           Padding(
                             padding: const EdgeInsets.all(16.0),

@@ -4,17 +4,37 @@ import 'package:remindme/app/models/taskModel.dart';
 
 class TasksModel extends ChangeNotifier {
   List<Task> _tasks = [];
+  Task _psuedo;
   DatabaseHelper db = DatabaseHelper();
+
+  bool _flag = true;
+
+  bool get flagVal => _flag;
+
+  set flag(bool val) {
+    _flag = val;
+  }
 
   bool _isLoading = false;
 
   bool get isLoading => _isLoading;
 
   List<Task> get allTasks => _tasks;
+  set allTasks(List<Task> tasks) {
+    _tasks = tasks;
+    notifyListeners();
+  }
 
   Map<String, dynamic> _taskMap = {};
 
   Map<String, dynamic> get taskMap => _taskMap;
+
+  Task get pseudo => _psuedo;
+
+  set pseudo(Task task) {
+    _psuedo = task;
+    notifyListeners();
+  }
 
   set taskMap(Map<String, dynamic> map) {
     _taskMap = map;
@@ -59,9 +79,19 @@ class TasksModel extends ChangeNotifier {
   }
 
   void deleteTask(Task task) {
-    db.deleteTask(task.id);
     _tasks.remove(task);
-    print(task.title);
+    // db.deleteTask(task.id);
+    notifyListeners();
+  }
+
+  void check(int id) {
+    if (_flag) {
+      deleteFromDb(id);
+    }
+  }
+
+  void deleteFromDb(int id) {
+    db.deleteTask(id);
     notifyListeners();
   }
 }

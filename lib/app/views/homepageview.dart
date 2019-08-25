@@ -110,7 +110,6 @@ class _HomePageViewState extends State<HomePageView> {
                             return Dismissible(
                               key: Key(task.id.toString()),
                               background: Container(
-                                
                                 padding: EdgeInsets.only(right: 20),
                                 alignment: Alignment.centerRight,
                                 color: Colors.transparent,
@@ -118,6 +117,8 @@ class _HomePageViewState extends State<HomePageView> {
                               ),
                               direction: DismissDirection.endToStart,
                               onDismissed: (direction) {
+                                tsk.pseudo = task;
+                                tsk.flag = true;
                                 tsk.deleteTask(task);
                                 Scaffold.of(context).showSnackBar(SnackBar(
                                   content: Text(
@@ -126,9 +127,19 @@ class _HomePageViewState extends State<HomePageView> {
                                   duration: Duration(seconds: 3),
                                   action: SnackBarAction(
                                     label: "Undo",
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      List<Task> revisedList = tsk.allTasks;
+                                      revisedList.insert(i, tsk.pseudo);
+                                      tsk.allTasks = revisedList;
+                                      tsk.flag = false;
+                                      tsk.check(task.id);
+                                    },
                                   ),
                                 ));
+                                Future.delayed(Duration(seconds: 3))
+                                    .whenComplete(() {
+                                  tsk.check(task.id);
+                                });
                               },
                               child: TodoTaskList(task: task),
                             );
