@@ -1,7 +1,7 @@
 # Remind Me
 
 # APK: 
-![https://tinyurl.com/y2x3wg79](https://tinyurl.com/y2x3wg79)
+[Google Drive Link](https://tinyurl.com/y2x3wg79)
 
 # Screenshots
 
