@@ -108,7 +108,8 @@ class _HomePageViewState extends State<HomePageView> {
                     : SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (context, i) {
-                            Task task = tsk.allTasks[i];
+                            List<Task> tasks = tsk.allTasks.reversed.toList();
+                            Task task = tasks[i];
                             return Dismissible(
                               key: Key(task.id.toString()),
                               background: Container(
@@ -143,7 +144,9 @@ class _HomePageViewState extends State<HomePageView> {
                                   tsk.check(task.id);
                                 });
                               },
-                              child: TodoTaskList(task: task,),
+                              child: TodoTaskList(
+                                task: task,
+                              ),
                             );
                           },
                           childCount: tsk.allTasks.length,
