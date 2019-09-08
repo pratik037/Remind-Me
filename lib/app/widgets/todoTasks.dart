@@ -12,8 +12,7 @@ class TodoTaskList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController title = TextEditingController();
-    TextEditingController desc = TextEditingController();
+    
     return Container(
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.all(10),
@@ -22,7 +21,7 @@ class TodoTaskList extends StatelessWidget {
             Material(
               elevation: 4,
               borderRadius: BorderRadius.only(bottomRight: Radius.circular(30)),
-              child: BttomSheet(task: task, title: title, desc: desc),
+              child: BttomSheet(task: task),
             ),
             Center(
               child: Padding(

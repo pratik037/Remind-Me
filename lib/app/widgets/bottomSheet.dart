@@ -7,24 +7,34 @@ import 'package:remindme/app/models/tasksListModel.dart';
 import 'package:remindme/app/widgets/dtBtn.dart';
 import 'package:remindme/app/widgets/fieldWidget.dart';
 
-class BttomSheet extends StatelessWidget {
+class BttomSheet extends StatefulWidget {
   const BttomSheet({
     Key key,
     @required this.task,
-    @required this.title,
-    @required this.desc,
   }) : super(key: key);
 
   final Task task;
-  final TextEditingController title;
-  final TextEditingController desc;
-  
+
+  @override
+  _BttomSheetState createState() => _BttomSheetState();
+}
+
+class _BttomSheetState extends State<BttomSheet> {
+  TextEditingController title = TextEditingController();
+  TextEditingController desc = TextEditingController();
+
+  @override
+  void initState() {
+    title.text = this.widget.task.title;
+    desc.text = this.widget.task.desc;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     var tasksModel = Provider.of<TasksModel>(context);
     return InkWell(
-      onTap: task.date.compareTo(DateTime.now()) > 0
+      onTap: widget.task.date.compareTo(DateTime.now()) > 0
           ? () {
               //this code takes care of updating the reminders.
               // Has fields to update the reminder details.
@@ -58,21 +68,21 @@ class BttomSheet extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                'Reminder Title : ${task.title}',
+                                'Reminder Title : ${widget.task.title}',
                                 style: TextStyle(fontSize: 20),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                'Reminder Date : ${DateFormat.yMMMMd().format(task.date)}',
+                                'Reminder Date : ${DateFormat.yMMMMd().format(widget.task.date)}',
                                 style: TextStyle(fontSize: 20),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                'Reminder Time : ${DateFormat("hh:mm a").format(task.date)}',
+                                'Reminder Time : ${DateFormat("hh:mm a").format(widget.task.date)}',
                                 style: TextStyle(fontSize: 20),
                               ),
                             ),
@@ -83,12 +93,12 @@ class BttomSheet extends StatelessWidget {
                               children: <Widget>[
                                 DateTimeButton(),
                                 RaisedButton.icon(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.0)),
-                                  icon: Icon(Icons.done),
-                                  label: Text("Update"),
-                                  onPressed:null
-                                )
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0)),
+                                    icon: Icon(Icons.done),
+                                    label: Text("Update"),
+                                    onPressed: null)
                               ],
                             ),
                             Container(
@@ -139,21 +149,21 @@ class BttomSheet extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Reminder Title : ${task.title}',
+                            'Reminder Title : ${widget.task.title}',
                             style: TextStyle(fontSize: 20),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Reminded on : ${DateFormat.yMMMMd().format(task.date)}',
+                            'Reminded on : ${DateFormat.yMMMMd().format(widget.task.date)}',
                             style: TextStyle(fontSize: 20),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Reminded at : ${DateFormat("hh:mm a").format(task.date)}',
+                            'Reminded at : ${DateFormat("hh:mm a").format(widget.task.date)}',
                             style: TextStyle(fontSize: 20),
                           ),
                         ),
@@ -182,18 +192,18 @@ class BttomSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  '${DateFormat.yMMMMd().format(task.date)}',
+                  '${DateFormat.yMMMMd().format(widget.task.date)}',
                   style: TextStyle(fontSize: 20),
                 ),
                 Text(
-                  DateFormat("hh:mm a").format(task.date),
+                  DateFormat("hh:mm a").format(widget.task.date),
                   // '${task.date.hour} : ${task.date.minute}',
                   style: TextStyle(fontSize: 18),
                 ),
               ],
             ),
             Text(
-              task.title,
+              widget.task.title,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Divider(
@@ -201,7 +211,7 @@ class BttomSheet extends StatelessWidget {
               endIndent: 250,
             ),
             Text(
-              task.desc,
+              widget.task.desc,
               style: TextStyle(fontSize: 16),
             )
           ],
@@ -209,41 +219,4 @@ class BttomSheet extends StatelessWidget {
       ),
     );
   }
-
-  //   SnackBar addPageSnack() {
-  //   return SnackBar(
-  //     content: Text(
-  //       'Please select date and time of the future.',
-  //       style: TextStyle(
-  //         fontSize: 18,
-  //         color: Colors.white,
-  //       ),
-  //     ),
-  //     action: SnackBarAction(
-  //       label: "Dismiss",
-  //       textColor: Colors.yellow,
-  //       onPressed: () {
-  //         _scaffoldKey.currentState.hideCurrentSnackBar();
-  //       },
-  //     ),
-  //     duration: Duration(seconds: 3),
-  //   );
-  // }
-
-  // Future submitData() async {
-  //   var tasksModel = Provider.of<TasksModel>(context);
-
-  //   Map<String, dynamic> task = tasksModel.taskMap;
-
-  //   task['title'] = title.text;
-  //   task['description'] = desc.text;
-
-  //   tasksModel.taskMap = task;
-
-  //   bool val = await tasksModel.addTask(task);
-  //   if (val) {
-  //     tasksModel.taskMap = {};
-  //     Navigator.pushReplacementNamed(context, '/');
-  //   }
-  // }
 }
