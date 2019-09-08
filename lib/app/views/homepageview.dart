@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:remindme/app/models/taskModel.dart';
 import 'package:remindme/app/models/tasksListModel.dart';
 import 'package:provider/provider.dart';
@@ -27,18 +28,12 @@ class _HomePageViewState extends State<HomePageView> {
 
     super.initState();
   }
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    Future.delayed(Duration(milliseconds: 200)).then((_) {
-      _initiateFetch();
-    });
-    
-  }
 
   void _initiateFetch() async {
     await tasksModel.getAllTasks();
   }
+
+  
 
   Future<bool> _exitApp(BuildContext context) {
     SystemNavigator.pop();
@@ -53,112 +48,118 @@ class _HomePageViewState extends State<HomePageView> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        body: CustomScrollView(
-          slivers: <Widget>[
-            SliverList(
-              delegate: SliverChildListDelegate([
-                Center(
-                  child: SizedBox(
-                    height: 250,
-                    width: 250,
-                    child: Container(
-                      //alignment: Alignment.topLeft,
-                      child: SvgPicture.asset(homeImage),
-                      // child: Image,
+        body: LiquidPullToRefresh(
+          color: Colors.indigoAccent,
+          showChildOpacityTransition: false,
+                  child: CustomScrollView(
+            slivers: <Widget>[
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  Center(
+                    child: SizedBox(
+                      height: 250,
+                      width: 250,
+                      child: Container(
+                        //alignment: Alignment.topLeft,
+                        child: SvgPicture.asset(homeImage),
+                        // child: Image,
+                      ),
                     ),
                   ),
-                ),
-                Text(
-                  "Reminders",
-                  style: TextStyle(
-                      color: Colors.indigoAccent,
-                      fontSize: 35,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Roboto'),
-                  textAlign: TextAlign.center,
-                ),
-                Divider(
-                  color: Colors.black38,
-                  endIndent: 150,
-                  indent: 150,
-                )
-              ]),
-            ),
-            tsk.isLoading
-                ? SliverList(
-                    delegate: SliverChildListDelegate([
-                      Container(
-                        height: 20,
-                        width: 5,
-                        alignment: Alignment.center,
-                        child: CircularProgressIndicator(),
-                      )
-                    ]),
+                  Text(
+                    "Reminders",
+                    style: TextStyle(
+                        color: Colors.indigoAccent,
+                        fontSize: 35,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Roboto'),
+                    textAlign: TextAlign.center,
+                  ),
+                  Divider(
+                    color: Colors.black38,
+                    endIndent: 150,
+                    indent: 150,
                   )
-                : tsk.allTasks.length == 0
-                    ? SliverList(
-                        delegate: SliverChildListDelegate([
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.27,
-                            margin: EdgeInsets.all(16),
-                            padding: EdgeInsets.all(16),
-                            alignment: Alignment.bottomCenter,
-                            child: Text(
-                              "Hmmm, No Reminders...",
-                              style: TextStyle(fontSize: 25),
-                              textAlign: TextAlign.center,
+                ]),
+              ),
+              tsk.isLoading
+                  ? SliverList(
+                      delegate: SliverChildListDelegate([
+                        Container(
+                          height: 20,
+                          width: 5,
+                          alignment: Alignment.center,
+                          child: CircularProgressIndicator(),
+                        )
+                      ]),
+                    )
+                  : tsk.allTasks.length == 0
+                      ? SliverList(
+                          delegate: SliverChildListDelegate([
+                            Container(
+                              height: MediaQuery.of(context).size.height * 0.27,
+                              margin: EdgeInsets.all(16),
+                              padding: EdgeInsets.all(16),
+                              alignment: Alignment.bottomCenter,
+                              child: Text(
+                                "Hmmm, No Reminders...",
+                                style: TextStyle(fontSize: 25),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
+                          ]),
+                        )
+                      : SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, i) {
+                              List<Task> tasks = tsk.allTasks.reversed.toList();
+                              Task task = tasks[i];
+                              return Dismissible(
+                                key: Key(task.id.toString()),
+                                background: Container(
+                                  padding: EdgeInsets.only(right: 20),
+                                  alignment: Alignment.centerRight,
+                                  color: Colors.transparent,
+                                  child: Icon(Icons.delete),
+                                ),
+                                direction: DismissDirection.endToStart,
+                                onDismissed: (direction) {
+                                  tsk.pseudo = task;
+                                  tsk.flag = true;
+                                  tsk.deleteTask(task);
+                                  Scaffold.of(context).showSnackBar(SnackBar(
+                                    content: Text(
+                                      '${task.title} deleted',
+                                    ),
+                                    duration: Duration(seconds: 3),
+                                    action: SnackBarAction(
+                                      label: "Undo",
+                                      onPressed: () {
+                                        List<Task> revisedList = tsk.allTasks;
+                                        revisedList.insert(i, tsk.pseudo);
+                                        tsk.allTasks = revisedList;
+                                        tsk.flag = false;
+                                        tsk.check(task.id);
+                                      },
+                                    ),
+                                  ));
+                                  Future.delayed(Duration(seconds: 3))
+                                      .whenComplete(() {
+                                    tsk.check(task.id);
+                                  });
+                                },
+                                child: TodoTaskList(
+                                  task: task,
+                                ),
+                              );
+                            },
+                            childCount: tsk.allTasks.length,
                           ),
-                        ]),
-                      )
-                    : SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, i) {
-                            List<Task> tasks = tsk.allTasks.reversed.toList();
-                            Task task = tasks[i];
-                            return Dismissible(
-                              key: Key(task.id.toString()),
-                              background: Container(
-                                padding: EdgeInsets.only(right: 20),
-                                alignment: Alignment.centerRight,
-                                color: Colors.transparent,
-                                child: Icon(Icons.delete),
-                              ),
-                              direction: DismissDirection.endToStart,
-                              onDismissed: (direction) {
-                                tsk.pseudo = task;
-                                tsk.flag = true;
-                                tsk.deleteTask(task);
-                                Scaffold.of(context).showSnackBar(SnackBar(
-                                  content: Text(
-                                    '${task.title} deleted',
-                                  ),
-                                  duration: Duration(seconds: 3),
-                                  action: SnackBarAction(
-                                    label: "Undo",
-                                    onPressed: () {
-                                      List<Task> revisedList = tsk.allTasks;
-                                      revisedList.insert(i, tsk.pseudo);
-                                      tsk.allTasks = revisedList;
-                                      tsk.flag = false;
-                                      tsk.check(task.id);
-                                    },
-                                  ),
-                                ));
-                                Future.delayed(Duration(seconds: 3))
-                                    .whenComplete(() {
-                                  tsk.check(task.id);
-                                });
-                              },
-                              child: TodoTaskList(
-                                task: task,
-                              ),
-                            );
-                          },
-                          childCount: tsk.allTasks.length,
-                        ),
-                      )
-          ],
+                        )
+            ],
+          ), onRefresh: () async{
+            await tasksModel.getAllTasks();
+          },
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
