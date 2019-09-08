@@ -18,6 +18,7 @@ class Field extends StatelessWidget {
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
+          hintText: controller.text,
           labelText: name,
           labelStyle: TextStyle(color:col),
           focusColor: col,
