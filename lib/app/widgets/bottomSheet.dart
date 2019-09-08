@@ -6,6 +6,7 @@ import 'package:remindme/app/models/taskModel.dart';
 import 'package:remindme/app/models/tasksListModel.dart';
 import 'package:remindme/app/widgets/dtBtn.dart';
 import 'package:remindme/app/widgets/fieldWidget.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class BttomSheet extends StatefulWidget {
   const BttomSheet({
@@ -93,12 +94,25 @@ class _BttomSheetState extends State<BttomSheet> {
                               children: <Widget>[
                                 DateTimeButton(),
                                 RaisedButton.icon(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0)),
-                                    icon: Icon(Icons.done),
-                                    label: Text("Update"),
-                                    onPressed: null)
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0)),
+                                  icon: Icon(Icons.done),
+                                  label: Text("Update"),
+                                  color: Colors.blue[300],
+                                  onPressed: () async {
+                                    print(widget.task.id);
+                                    tasksModel.taskMap['dateTime'] != null
+                                        ? await updateData(context,widget.task.id)
+                                        : Fluttertoast.showToast(
+                                            msg: "Select Date and Time",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIos: 1,
+                                            backgroundColor: Colors.red,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                  },
+                                )
                               ],
                             ),
                             Container(
@@ -218,5 +232,21 @@ class _BttomSheetState extends State<BttomSheet> {
         ),
       ),
     );
+  }
+
+//Handles callback for updating a task
+  Future updateData(BuildContext context, int id) async {
+    var tasksModel = Provider.of<TasksModel>(context);
+    Map<String, dynamic> task = tasksModel.taskMap;
+    task['id'] = id;
+    task['title'] = title.text;
+    task['description'] = desc.text;
+
+    tasksModel.taskMap = task;
+    bool val = await tasksModel.update(task);
+    if (val) {
+      tasksModel.taskMap = {};
+      Navigator.of(context).pop();
+    }
   }
 }

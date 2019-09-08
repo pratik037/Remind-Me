@@ -8,25 +8,34 @@ class TasksModel extends ChangeNotifier {
   DatabaseHelper db = DatabaseHelper();
 
   bool _flag = true;
+  bool _isLoading = false;
 
+  //Getter for FLAG
   bool get flagVal => _flag;
 
+  //Setter for FLAG
   set flag(bool val) {
     _flag = val;
   }
 
-  bool _isLoading = false;
-
+  //Getter for loading
   bool get isLoading => _isLoading;
 
+
+
+  //Getter for all tasks
   List<Task> get allTasks => _tasks;
+
+  //Setter for all tasks
   set allTasks(List<Task> tasks) {
     _tasks = tasks;
     notifyListeners();
   }
 
+
   Map<String, dynamic> _taskMap = {};
 
+  //Getter for taskMap
   Map<String, dynamic> get taskMap => _taskMap;
 
   Task get pseudo => _psuedo;
@@ -63,11 +72,24 @@ class TasksModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  //Add task to the DB
+
   Future<bool> addTask(Map<String, dynamic> task) async {
     var res = await db.saveTask(task);
     if (res != null) {
       return true;
     } else
+      return false;
+  }
+
+  Future<bool> update(Map<String, dynamic> task) async{
+    print("Inside Update fn");
+    print(task);
+    var res = await db.updateTask(task);
+    if(res!= null){
+      return true;
+    }
+    else
       return false;
   }
 

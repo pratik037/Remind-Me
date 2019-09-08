@@ -73,9 +73,9 @@ class DatabaseHelper {
     return await dbClient.delete(tableTask, where:'$columnId = ?', whereArgs: [id] );
   }
 
-  Future<int> updateTask(Task task) async{
+  Future<int> updateTask(Map<String, dynamic> task) async{
     var dbClient = await db;
-    return await dbClient.update(tableTask, task.toMap(), where: '$columnId = ?' , whereArgs: [task.id]);
+    return await dbClient.update(tableTask, task, where: '$columnId = ?' , whereArgs: [task['id']]);
   }
   
   Future close() async{

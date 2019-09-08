@@ -32,8 +32,8 @@ void checkSendNotification() async {
       print(task.title);
       DateTime current = DateTime.now();
       print('Difference is : ' + '${current.difference(task.date)}');
-      bool shouldNotify = current.difference(task.date) <= Duration(minutes: 1);
-      if (shouldNotify) {
+      
+      if (current.difference(task.date) <= Duration(minutes: 1) && current.difference(task.date) > Duration(minutes: 0)) {
         showNotification(task: task);
       }
     });

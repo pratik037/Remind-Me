@@ -27,6 +27,14 @@ class _HomePageViewState extends State<HomePageView> {
 
     super.initState();
   }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    Future.delayed(Duration(milliseconds: 200)).then((_) {
+      _initiateFetch();
+    });
+    
+  }
 
   void _initiateFetch() async {
     await tasksModel.getAllTasks();
@@ -39,8 +47,6 @@ class _HomePageViewState extends State<HomePageView> {
   @override
   Widget build(BuildContext context) {
     var tsk = Provider.of<TasksModel>(context);
-    // print('tskModel length:  ${tsk.allTasks.length}');
-    // print('tasksModel length: ${tasksModel.allTasks.length}');
     return WillPopScope(
       onWillPop: () {
         _exitApp(context);
