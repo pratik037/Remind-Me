@@ -47,22 +47,20 @@ class TasksModel extends ChangeNotifier {
 
     List<Task> fetched = [];
 
-    // Get tasks from db
-    db.getAllTasks().then((tasks) {
-      // iterate through list of maps received from db to create list of TASK
-      tasks.forEach((task) {
-        fetched.add(Task.fromMap(task));
-        print("Fetched is: ");
-        print(fetched.length);
-      });
+    List<Map<String, dynamic>> tasks = await db.getAllTasks();
 
-      // assign the new fetched List<Task> to _tasks
-      if (fetched.length > 0) {
-        _tasks = fetched;
-      }
-      _isLoading = false;
-      notifyListeners();
+    tasks.forEach((task) {
+      fetched.add(Task.fromMap(task));
+      print("Fetched is: ");
+      print(fetched.length);
     });
+
+    // assign the new fetched List<Task> to _tasks
+    if (fetched.length > 0) {
+      _tasks = fetched;
+    }
+    _isLoading = false;
+    notifyListeners();
   }
 
   Future<bool> addTask(Map<String, dynamic> task) async {
