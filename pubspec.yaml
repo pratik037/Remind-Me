@@ -31,6 +31,8 @@ dependencies:
   provider: ^3.0.0+1
   date_format: ^1.0.6
   liquid_pull_to_refresh: ^1.1.1
+  local_auth: ^0.6.0
+  flutter_lock_screen: ^1.0.5
 
   #To show toast
   fluttertoast: ^3.1.3

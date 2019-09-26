@@ -23,7 +23,7 @@ class _PassCodeScreenState extends State<PassCodeScreen> {
       authenticated = await auth.authenticateWithBiometrics(
           localizedReason: 'Scan your fingerprint to authenticate',
           useErrorDialogs: true,
-          stickyAuth: false);
+          stickyAuth: true);
     } on PlatformException catch (e) {
       print(e);
     }
@@ -61,7 +61,7 @@ class _PassCodeScreenState extends State<PassCodeScreen> {
           return true;
         },
         onSuccess: () {
-          Navigator.pushNamed(context, '/');
+          Navigator.pushReplacementNamed(context, '/');
         });
   }
 }
